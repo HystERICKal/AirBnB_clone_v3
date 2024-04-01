@@ -96,11 +96,11 @@ class TestDBStorage(unittest.TestCase):
         models.storage.new(latest_state)
 
         the_sesh = models.storage._DBStorage__session
-        found_this = the_sesh.query(State).filter_by(id=latest_state).first()
+        found_this = the_sesh.query(State).filter_by(id=latest_state.id).first()  # noqa
 
         self.assertEqual(found_this.id, latest_state.id)
         self.assertEqual(found_this.name, latest_state.name)
-        self.assertIsNone(found_this)
+        self.assertIsNotNone(found_this)
 
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_save(self):
@@ -112,11 +112,11 @@ class TestDBStorage(unittest.TestCase):
         models.storage.save()
 
         the_sesh = models.storage._DBStorage__session
-        found_this = the_sesh.query(State).filter_by(id=latest_state).first()
+        found_this = the_sesh.query(State).filter_by(id=latest_state.id).first()  # noqa
 
         self.assertEqual(found_this.id, latest_state.id)
         self.assertEqual(found_this.name, latest_state.name)
-        self.assertIsNone(found_this)
+        self.assertIsNotNone(found_this)
 
 	@unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_get(self):
@@ -126,6 +126,9 @@ class TestDBStorage(unittest.TestCase):
 
         state_contents = {"name": "Dondori"}
         state_cond = State(**state_contents)
+
+		tempy.new(state_cond)
+        tempy.save()
 
         found_this = tempy.get(State, state_cond.id)
         self.assertEqual(state_cond, found_this)
