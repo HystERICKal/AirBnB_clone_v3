@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-'''api connect'''
+'''api connection begins with this file'''
 
 from api.v1.views import app_views
 from flask import jsonify
@@ -8,13 +8,13 @@ from models import storage
 
 @app_views.route("/status", strict_slashes=False)
 def status():
-    """JSON"""
+    """This route returns a JSON status"""
     return jsonify({'status': 'OK'})
 
 
 @app_views.route('/api/v1/stats', strict_slashes=False)
 def stats():
-    """the stats"""
+    """retruns the number of each object by type"""
     classes = {
         'amenities': 'Amenity',
         'cities': 'City',
