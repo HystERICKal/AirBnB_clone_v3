@@ -114,7 +114,7 @@ class TestFileStorage(unittest.TestCase):
             js = f.read()
         self.assertEqual(json.loads(string), json.loads(js))
 
-	@unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_get(self):
         """Testing get """
         tempy = FileStorage()
@@ -123,7 +123,7 @@ class TestFileStorage(unittest.TestCase):
         state_contents = {"name": "Dondori"}
         state_cond = State(**state_contents)
 
-		tempy.new(state_cond)
+        tempy.new(state_cond)
         tempy.save()
 
         found_this = tempy.get(State, state_cond.id)
@@ -132,7 +132,7 @@ class TestFileStorage(unittest.TestCase):
         unreal_state = tempy.get(State, 'fake_id')
         self.assertEqual(unreal_state, None)
 
-	@unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_count(self):
         """Testing count """
         tempy = FileStorage()

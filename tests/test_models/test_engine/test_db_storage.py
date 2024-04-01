@@ -78,7 +78,7 @@ class TestDBStorage(unittest.TestCase):
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_all_no_class(self):
         """Test that all returns all rows when no class is passed"""
-		state_contents = {"name": "Mombasa"}
+        state_contents = {"name": "Mombasa"}
         latest_state = State(**state_contents)
         models.storage.new(latest_state)
         models.storage.save()
@@ -90,7 +90,7 @@ class TestDBStorage(unittest.TestCase):
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_new(self):
         """test that new adds an object to the database"""
-		        state_contents = {"name": "Kisumu"}
+        state_contents = {"name": "Kisumu"}
         latest_state = State(**state_contents)
 
         models.storage.new(latest_state)
@@ -105,7 +105,7 @@ class TestDBStorage(unittest.TestCase):
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_save(self):
         """Test that save properly saves objects to file.json"""
-		        state_contents = {"name": "Kakamega"}
+        state_contents = {"name": "Kakamega"}
         latest_state = State(**state_contents)
 
         models.storage.new(latest_state)
@@ -118,7 +118,7 @@ class TestDBStorage(unittest.TestCase):
         self.assertEqual(found_this.name, latest_state.name)
         self.assertIsNotNone(found_this)
 
-	@unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_get(self):
         """Testing get """
         tempy = models.storage
@@ -127,7 +127,7 @@ class TestDBStorage(unittest.TestCase):
         state_contents = {"name": "Dondori"}
         state_cond = State(**state_contents)
 
-		tempy.new(state_cond)
+        tempy.new(state_cond)
         tempy.save()
 
         found_this = tempy.get(State, state_cond.id)
@@ -136,7 +136,7 @@ class TestDBStorage(unittest.TestCase):
         unreal_state = tempy.get(State, 'fake_id')
         self.assertEqual(unreal_state, None)
 
-	@unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_count(self):
         """Testing count """
         tempy = models.storage
