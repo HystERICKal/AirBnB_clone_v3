@@ -68,7 +68,7 @@ test_db_storage.py'])
                             "{:s} method needs a docstring".format(func[0]))
 
 
-class TestFileStorage(unittest.TestCase):
+class TestDBStorage(unittest.TestCase):
     """Test the FileStorage class"""
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_all_returns_dict(self):
@@ -78,11 +78,78 @@ class TestFileStorage(unittest.TestCase):
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_all_no_class(self):
         """Test that all returns all rows when no class is passed"""
+		state_contents = {"name": "Mombasa"}
+        latest_state = State(**state_contents)
+        models.storage.new(latest_state)
+        models.storage.save()
+
+        the_sesh = models.storage._DBStorage__session
+        temp_combined = the_sesh.query(State).all()
+        self.assertTrue(len(temp_combined) > 0)
 
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_new(self):
         """test that new adds an object to the database"""
+		        state_contents = {"name": "Kisumu"}
+        latest_state = State(**state_contents)
+
+        models.storage.new(latest_state)
+
+        the_sesh = models.storage._DBStorage__session
+        found_this = the_sesh.query(State).filter_by(id=latest_state).first()
+
+        self.assertEqual(found_this.id, latest_state.id)
+        self.assertEqual(found_this.name, latest_state.name)
+        self.assertIsNone(found_this)
 
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_save(self):
         """Test that save properly saves objects to file.json"""
+		        state_contents = {"name": "Kakamega"}
+        latest_state = State(**state_contents)
+
+        models.storage.new(latest_state)
+        models.storage.save()
+
+        the_sesh = models.storage._DBStorage__session
+        found_this = the_sesh.query(State).filter_by(id=latest_state).first()
+
+        self.assertEqual(found_this.id, latest_state.id)
+        self.assertEqual(found_this.name, latest_state.name)
+        self.assertIsNone(found_this)
+
+	@unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    def test_get(self):
+        """Testing get """
+        tempy = models.storage
+        tempy.reload()
+
+        state_contents = {"name": "Dondori"}
+        state_cond = State(**state_contents)
+
+        found_this = tempy.get(State, state_cond.id)
+        self.assertEqual(state_cond, found_this)
+
+        unreal_state = tempy.get(State, 'fake_id')
+        self.assertEqual(unreal_state, None)
+
+	@unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    def test_count(self):
+        """Testing count """
+        tempy = models.storage
+        tempy.reload()
+        state_contents = {"name": "Eldoret"}
+        state_cond = State(**state_contents)
+        tempy.new(state_cond)
+
+        state_contents = {"name": "Kesses", "state_id": state_cond.id}
+        state_cond = City(**state_contents)
+
+        tempy.new(state_cond)
+        tempy.save()
+
+        state_freq = tempy.count(State)
+        self.assertEqual(state_freq, len(tempy.all(State)))
+
+        all_freq = tempy.count()
+        self.assertEqual(all_freq, len(tempy.all()))
