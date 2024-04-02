@@ -8,7 +8,7 @@ from models.amenity import Amenity
 
 
 @app_views.route('/amenities', methods=['GET'], strict_slashes=False)
-def get_amenities():
+def get_amenitiess():
     """Get all the amenities."""
     facitilies = []
     for i in storage.all("Amenity").values():
